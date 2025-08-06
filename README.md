@@ -176,5 +176,3 @@ Make sure your backend server is running at `localhost:5000`.
 - [ ] Deploy to cloud (e.g., Render, Railway, Vercel)
 - [ ] Add password-based login for Admin
 - [ ] Add pagination & search/sort in Admin view
-
-> Made with ❤️ by **Harshit Mhatre**
