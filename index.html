@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Registration & Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      background: #e9e9e9;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+
+    .admin-section {
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Registration</h2>
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="volunteer">Volunteer</option>
+        <option value="intern">Intern</option>
+      </select>
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="admin-section">
+      <h2>Admin Panel</h2>
+      <input type="password" id="adminSecret" placeholder="Enter Admin Secret">
+      <button onclick="getAllUsers()">Get All Users</button>
+      <ul id="userList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Register user
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const role = document.getElementById('role').value;
+
+      const response = await fetch('http://localhost:5000/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, role })
+      });
+
+      const data = await response.json();
+      alert(data.message || 'Registration completed');
+    });
+
+    // Admin: Get all users
+    async function getAllUsers() {
+      const adminSecret = document.getElementById('adminSecret').value;
+
+      const response = await fetch('http://localhost:5000/api/users/all', {
+        headers: {
+          'admin-secret': adminSecret
+        }
+      });
+
+      const data = await response.json();
+
+      const userList = document.getElementById('userList');
+      userList.innerHTML = '';
+
+      if (data.users && Array.isArray(data.users)) {
+        data.users.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.name} - ${user.email} (${user.role})`;
+          userList.appendChild(li);
+        });
+      } else {
+        alert(data.message || 'Failed to fetch users');
+      }
+    }
+  </script>
+</body>
+</html>
