@@ -83,13 +83,63 @@ Server will run at: [http://localhost:5000](http://localhost:5000)
 
 ## 🧪 API Testing (Postman)
 
-Postman collection available in the repo:
+## 📬 How to Use Postman
 
-📁 `postman_collection.json`
+### 🔹 1. Register a New User (POST)
 
-Use it to test registration and admin routes easily.
+**URL:**  
+```
+http://localhost:5000/api/users/register
+```
+
+**Method:** `POST`  
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Body (raw → JSON):**
+```json
+{
+  "name": "Harshit Mhatre",
+  "email": "harshit@gmail.com",
+  "role": "intern"
+}
+```
+
+**Example Success Response:**
+```json
+{
+  "message": "User registered successfully"
+}
+```
 
 ---
+
+### 🔹 2. Get All Users (GET – Admin Only)
+
+**URL:**  
+```
+http://localhost:5000/api/users/all?secret=youradminsecret
+```
+
+**Method:** `GET`
+
+> Replace `youradminsecret` with the value you defined in your `.env` file.
+
+**Example Success Response:**
+```json
+[
+  {
+    "_id": "64f03bd...",
+    "name": "Harshit Mhatre",
+    "email": "harshit@gmail.com",
+    "role": "intern",
+    "__v": 0
+  },
+  ...
+]
+```
 
 ## 🖥 Frontend Interface
 
